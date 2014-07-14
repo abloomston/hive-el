@@ -62,7 +62,9 @@
                  :sqli-login 'sql-hive-login-params
                  :sqli-comint-func 'sql-comint-hive
                  :prompt-regexp "^hive\\( (.*)\\)?> "
-                 :prompt-cont-regexp "^[[:space:]]+> ")
+                 :prompt-cont-regexp "^[[:space:]]+> "
+                 :list-all "show tables;"
+                 :list-table "describe %s;")
 
 (provide 'hive)
 

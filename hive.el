@@ -46,7 +46,7 @@
   :type 'sql-login-params
   :group 'SQL)
 
-(defcustom sql-hive-prompt "hive> "
+(defcustom sql-hive-prompt-re "hive\\( (.*)\\)?> "
   "Hive prompt."
   :type 'string
   :group 'SQL)
@@ -87,7 +87,7 @@ row) and as a table.  Uses org-table."
                              sql-hive-results-terminator-re
                              output results-start))
                (prompt-begin (string-match
-                              (concat "^" sql-hive-prompt "$")
+                              (concat "^" sql-hive-prompt-re "$")
                               output (or results-end results-start)))
                (resultset (concat sql-hive--resultset-partial
                                   (substring output results-start results-end))))
@@ -199,9 +199,8 @@ input (and then delete the echo via `sql-hive-scrub-empty-input-output')."
 
 (defun sql-hive-scrub-empty-input-output (str)
   "Delete the output which is just an echo of the bogus input."
-  (if (string-equal str
-                    (concat sql-hive-empty-input-string "\n" sql-hive-prompt))
-      sql-hive-prompt
+  (if (string-match (concat sql-hive-empty-input-string "\n" "\\(" sql-hive-prompt-re "\\)") str)
+      (match-string 1 str)
     str))
 
 ;; Font lock support
@@ -319,7 +318,7 @@ you define your own `sql-mode-hive-font-lock-keywords'.")
                  :sqli-options 'sql-hive-options
                  :sqli-login 'sql-hive-login-params
                  :sqli-comint-func 'sql-comint-hive
-                 :prompt-regexp "^hive\\( (.*)\\)?> "
+                 :prompt-regexp (concat "^" sql-hive-prompt-re)
                  :prompt-cont-regexp "^[[:space:]]+> "
                  :input-filter 'handle-empty-input-filter
                  :font-lock 'sql-mode-hive-font-lock-keywords

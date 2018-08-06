@@ -45,10 +45,10 @@
   :type 'sql-login-params
   :group 'SQL)
 
-(defun sql-comint-hive (product options)
+(defun sql-comint-hive (product options &optional buffer)
   "Create comint buffer and connect to Hive."
   (let ((params options))
-    (sql-comint product params)))
+    (sql-comint product params buffer)))
 
 ;;;###autoload
 (defun sql-hive (&optional buffer)
